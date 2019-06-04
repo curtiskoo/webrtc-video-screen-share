@@ -1,21 +1,8 @@
 import React from "react";
 import RTCMultiConnection from "rtcmulticonnection"
-import getMediaElement from "getmediaelement"
-import getScreenConstraints from "webrtc-screen-capturing"
 import io from "socket.io-client"
 
 window.io = io;
-// socket.on('initiate', () => {
-//     this.getScreenConstraints();
-// })
-
-var RMCMediaTrack = {
-    cameraStream: null,
-    cameraTrack: null,
-    screen: null
-};
-
-var roomid = "1234"
 
 class ScreenShareSession extends React.Component {
     constructor(props) {
@@ -24,6 +11,7 @@ class ScreenShareSession extends React.Component {
         this.state = {
             videosContainer: null,
             roomid: null,
+            screenCaptureStream: null,
         }
 
         this.connection = new RTCMultiConnection
@@ -75,6 +63,7 @@ class ScreenShareSession extends React.Component {
             console.log(video)
             video.srcObject = event.stream
             video.play()
+            video.muted = false
 
             // setTimeout(function() {
             //     event.mediaElement.media.load();
@@ -186,7 +175,6 @@ class ScreenShareSession extends React.Component {
 
     }
 
-
     toggleScreenShare = () => {
         navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         var displayMediaStreamConstraints = {
@@ -205,11 +193,13 @@ class ScreenShareSession extends React.Component {
                     console.log(stream1)
                     console.log(stream1.getVideoTracks())
                     console.log(stream1.getAudioTracks())
+                    this.setState({screenCaptureStream: stream1})
 
                     var video = document.querySelector('video')
                     console.log(video)
                     video.srcObject = stream1
                     video.play()
+                    video.muted = true
 
                     console.log(this.connection)
                     return;
@@ -227,75 +217,6 @@ class ScreenShareSession extends React.Component {
                     });
                 })
         }
-    }
-
-
-    getScreenStream = (callback) => {
-        var screen_constraints = {
-            video: true, // currently you need to set {true} on Chrome
-            audio: true,
-            screen: true,
-        };
-        navigator.mediaDevices.getDisplayMedia(screen_constraints).then(function(screen) {
-            RMCMediaTrack.screen = screen.getVideoTracks()[0];
-            RMCMediaTrack.selfVideo.srcObject = screen;
-            // in case if onedned event does not fire
-            (function looper() {
-                // readyState can be "live" or "ended"
-                if (RMCMediaTrack.screen.readyState === 'ended') {
-                    RMCMediaTrack.screen.onended();
-                    return;
-                }
-                setTimeout(looper, 1000);
-            })();
-            var firedOnce = false;
-            RMCMediaTrack.screen.onended = RMCMediaTrack.screen.onmute = RMCMediaTrack.screen.oninactive = function() {
-                if (firedOnce) return;
-                firedOnce = true;
-                if (RMCMediaTrack.cameraStream.getVideoTracks()[0].readyState) {
-                    RMCMediaTrack.cameraStream.getVideoTracks().forEach(function(track) {
-                        RMCMediaTrack.cameraStream.removeTrack(track);
-                    });
-                    RMCMediaTrack.cameraStream.addTrack(RMCMediaTrack.cameraTrack);
-                }
-                RMCMediaTrack.selfVideo.srcObject = RMCMediaTrack.cameraStream;
-                this.connection.socket && this.connection.socket.emit(this.connection.socketCustomEvent, {
-                    justStoppedMyScreen: true,
-                    userid: this.connection.userid
-                });
-                // share camera again
-                this.replaceTrack(RMCMediaTrack.cameraTrack);
-                // now remove old screen from "attachStreams" array
-                this.connection.attachStreams = [this.connection.cameraStream];
-                // so that user can share again
-            };
-            this.connection.socket && this.connection.socket.emit(this.connection.socketCustomEvent, {
-                justSharedMyScreen: true,
-                userid: this.connection.userid
-            });
-            callback(screen);
-        });
-    }
-
-
-    replaceTrack = (videoTrack) => {
-        if (!videoTrack) return;
-        if (videoTrack.readyState === 'ended') {
-            alert('Can not replace an "ended" track. track.readyState: ' + videoTrack.readyState);
-            return;
-        }
-        this.connection.getAllParticipants().forEach(function(pid) {
-            var peer = this.connection.peers[pid].peer;
-            if (!peer.getSenders) return;
-            var trackToReplace = videoTrack;
-            peer.getSenders().forEach(function(sender) {
-                if (!sender || !sender.track) return;
-                if (sender.track.kind === 'video' && trackToReplace) {
-                    sender.replaceTrack(trackToReplace);
-                    trackToReplace = null;
-                }
-            });
-        });
     }
 
      makeOrJoinRoom = (roomid) => {
@@ -330,8 +251,13 @@ class ScreenShareSession extends React.Component {
         this.makeOrJoinRoom(input)
     }
 
+    exitRoom = () => {
+        this.state.screenCaptureStream.stop()
+        this.connection.closeSocket()
+        this.setState({roomid: null})
+    }
+
     componentDidMount() {
-        // this.makeOrJoinRoom(roomid)
         window.addEventListener("load", () => {
             // this.setState({videosContainer : document.getElementById('videos-container')})
             this.connection.videosContainer = document.getElementById('videos-container');
@@ -350,20 +276,23 @@ class ScreenShareSession extends React.Component {
                     <div>
                         This is the screen share feed
                         <div id='videos-container'>
-                            <video></video>
+                            <video controls></video>
                         </div>
                         <div id='audios-container'></div>
                         <button
                             onClick={() => {
                                 this.toggleScreenShare()
                             }}
-                        >Press me!
+                        >Share Screen
                         </button>
+                        <button onClick={this.exitRoom}>Exit</button>
                     </div>
                     :
                     <div>
-                        <input type='text' id='roomid-input' placeholder="Enter a Room ID"/>
-                        <button onClick={this.setRoomID}>Join!</button>
+                        <form onSubmit={this.setRoomID}>
+                            <input type='text' id='roomid-input' placeholder="Enter a Room ID"/>
+                            <input type="submit" value="Join Room" />
+                        </form>
                     </div>
                 }
             </React.Fragment>
