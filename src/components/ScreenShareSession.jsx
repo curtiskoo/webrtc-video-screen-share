@@ -77,102 +77,6 @@ class ScreenShareSession extends React.Component {
                 mediaElement.parentNode.removeChild(mediaElement);
             }
         };
-
-        // Using getScreenId.js to capture screen from any domain
-        // You do NOT need to deploy Chrome Extension YOUR-Self!!
-        // this.connection.getScreenConstraints = (error, screen_constraints) => {
-        //     // if (error) {
-        //     //     return alert(error);
-        //     // }
-        //
-        //     // this.getScreenStream(function(screen) {
-        //     //     var isLiveSession = this.connection.getAllParticipants().length > 0;
-        //     //     if (isLiveSession) {
-        //     //         this.replaceTrack(RMCMediaTrack.screen);
-        //     //     }
-        //     //     // now remove old video track from "attachStreams" array
-        //     //     // so that newcomers can see screen as well
-        //     //     this.connection.attachStreams.forEach(function(stream) {
-        //     //         stream.getVideoTracks().forEach(function(track) {
-        //     //             stream.removeTrack(track);
-        //     //         });
-        //     //         // now add screen track into that stream object
-        //     //         stream.addTrack(RMCMediaTrack.screen);
-        //     //     });
-        //     // });
-        //
-        //     navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-        //     var displayMediaStreamConstraints = {
-        //         video: true, // currently you need to set {true} on Chrome
-        //         audio: true,
-        //         screen: true,
-        //     };
-        //
-        //     // this.connection.session.audio = true;
-        //     // this.connection.session.video = true;
-        //     if (navigator.mediaDevices.getDisplayMedia) {
-        //         navigator.mediaDevices.getDisplayMedia(displayMediaStreamConstraints)
-        //             .then((stream1) => {
-        //                 console.log(this.connection)
-        //                 // console.log(stream1)
-        //                 // this.connection.addStream(stream1)
-        //                 // // this.connection.attachStreams.forEach((stream) => {
-        //                 // //     stream.addStream(stream1)
-        //                 // // })
-        //                 // console.log(this.connection)
-        //                 // // console.log(this.state.videosContainer)
-        //                 // // this.state.videosContainer.srcObject = stream1;
-        //                 // // // this.state.videosContainer.appendChild(stream1);
-        //                 // // console.log(this.state.videosContainer)
-        //                 // var video = document.querySelector('video')
-        //                 // video.src = stream1
-        //                 // video.onloadedmetadata = () => {
-        //                 //     video.play()
-        //                 // }
-        //                 // console.log(this.connection)
-        //                 // console.log(this.connection)
-        //
-        //
-        //                 this.connection.addStream(stream1)
-        //                 // this.connection.attachStreams.push(stream1)
-        //                 console.log(this.connection.videosContainer)
-        //                 console.log(stream1)
-        //                 console.log(stream1.getVideoTracks())
-        //
-        //                 var video = document.querySelector('video')
-        //                 console.log(video)
-        //                 video.srcObject = stream1
-        //                 video.play()
-        //
-        //
-        //
-        //                 // this.connection.videosContainer.appendChild(stream1.getVideoTracks()[0]);
-        //
-        //                 // this.connection.addStream({
-        //                 //     // screen: true,
-        //                 //     // audio: true,
-        //                 //     video: true,
-        //                 //     // oneway: true,
-        //                 // })
-        //                 console.log(this.connection)
-        //                 return;
-        //             })
-        //     } else {
-        //         navigator.getDisplayMedia(displayMediaStreamConstraints)
-        //             .then(stream => {
-        //                 this.connection.session.audio = true;
-        //                 this.connection.session.video = true;
-        //
-        //                 this.connection.addStream({
-        //                     audio: true, // because session.audio==true, now it works
-        //                     video: true, // because session.video==true, now it works
-        //                     oneway: true
-        //                 });
-        //             })
-        //     }
-        // }
-
-
     }
 
     toggleScreenShare = () => {
@@ -205,17 +109,19 @@ class ScreenShareSession extends React.Component {
                     return;
                 })
         } else {
-            navigator.getDisplayMedia(displayMediaStreamConstraints)
-                .then(stream => {
-                    this.connection.session.audio = true;
-                    this.connection.session.video = true;
+            // navigator.getDisplayMedia(displayMediaStreamConstraints)
+            //     .then(stream => {
+            //         this.connection.session.audio = true;
+            //         this.connection.session.video = true;
+            //
+            //         this.connection.addStream({
+            //             audio: true, // because session.audio==true, now it works
+            //             video: true, // because session.video==true, now it works
+            //             oneway: true
+            //         });
+            //     })
 
-                    this.connection.addStream({
-                        audio: true, // because session.audio==true, now it works
-                        video: true, // because session.video==true, now it works
-                        oneway: true
-                    });
-                })
+            alert("Only Chrome browser is supported at this time! :( ")
         }
     }
 
