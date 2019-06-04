@@ -13,7 +13,9 @@
     "socket.io-client": "^2.2.0",
     "typescript": "^3.5.1",
     "webrtc-scalable-broadcast": "^1.0.5",
-    "webrtc-screen-capturing": "^1.0.1"
+    "webrtc-screen-capturing": "^1.0.1",
+    "@typescript-eslint/parser": "^1.9.0",
+    "eslint-plugin-import": "^2.17.3"
   },
   "scripts": {
     "start": "react-scripts start",
