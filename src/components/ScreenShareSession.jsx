@@ -251,8 +251,34 @@ class ScreenShareSession extends React.Component {
         this.makeOrJoinRoom(input)
     }
 
+    removePeerStreams = (stream_id) => {
+        // this.connection.getAllParticipants().forEach((participantId) => {
+        //     var peer = this.connection.peers[participantId].peer;
+        //
+        //     // call RTCPeerConnection Native "removeStream"
+        //     // it works only in Chrome
+        //     peer.removeStream(stream);
+        // })
+
+        var streamToRemove = null;
+        var newArray =  [];
+        this.connection.attachStreams.forEach(function(stream) {
+            if(stream.id === stream_id) {
+                streamToRemove = stream;
+            }
+            else newArray.push(stream);
+        });
+        this.connection.attachStreams = newArray;
+
+        this.connection.renegotiate()
+
+    }
+
     exitRoom = () => {
-        // this.state.screenCaptureStream.stop()
+        console.log(this.state.screenCaptureStream)
+        // this.connection.removeStream(this.state.screenCaptureStream.id)
+        this.removePeerStreams(this.state.screenCaptureStream.id)
+        this.state.screenCaptureStream.stop()
         this.connection.closeSocket()
         this.setState({roomid: null})
     }
