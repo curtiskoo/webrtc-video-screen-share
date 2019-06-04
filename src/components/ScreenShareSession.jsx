@@ -252,7 +252,7 @@ class ScreenShareSession extends React.Component {
     }
 
     exitRoom = () => {
-        this.state.screenCaptureStream.stop()
+        // this.state.screenCaptureStream.stop()
         this.connection.closeSocket()
         this.setState({roomid: null})
     }

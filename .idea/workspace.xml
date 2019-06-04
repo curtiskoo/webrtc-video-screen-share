@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5a0d464d-9cb3-417a-aa2f-9c21b606010f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/components/ScreenShareSession.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ScreenShareSession.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="5a0d464d-9cb3-417a-aa2f-9c21b606010f" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,8 +26,8 @@
       <file leaf-file-name="ScreenShareSession.jsx" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/ScreenShareSession.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+            <state relative-caret-position="-2142">
+              <caret line="12" column="25" lean-forward="true" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -261,12 +259,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1559279895304</updated>
-      <workItem from="1559279898968" duration="48375000" />
+      <workItem from="1559279898968" duration="48753000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="48375000" />
+    <option name="totallyTimeSpent" value="48753000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -584,8 +582,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/ScreenShareSession.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        <state relative-caret-position="-2142">
+          <caret line="12" column="25" lean-forward="true" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
