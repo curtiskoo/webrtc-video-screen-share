@@ -23,6 +23,7 @@ class ScreenShareSession extends React.Component {
 
         this.state = {
             videosContainer: null,
+            roomid: null,
         }
 
         this.connection = new RTCMultiConnection
@@ -203,6 +204,7 @@ class ScreenShareSession extends React.Component {
                     console.log(this.connection.videosContainer)
                     console.log(stream1)
                     console.log(stream1.getVideoTracks())
+                    console.log(stream1.getAudioTracks())
 
                     var video = document.querySelector('video')
                     console.log(video)
@@ -321,8 +323,15 @@ class ScreenShareSession extends React.Component {
     }
 
 
+    setRoomID = () => {
+        let input = document.getElementById('roomid-input').value
+        console.log(input)
+        this.setState({roomid: input})
+        this.makeOrJoinRoom(input)
+    }
+
     componentDidMount() {
-        this.makeOrJoinRoom(roomid)
+        // this.makeOrJoinRoom(roomid)
         window.addEventListener("load", () => {
             // this.setState({videosContainer : document.getElementById('videos-container')})
             this.connection.videosContainer = document.getElementById('videos-container');
@@ -335,62 +344,29 @@ class ScreenShareSession extends React.Component {
     render() {
 
         return (
-        <div>
-            This is the screen share feed
-            <div id='videos-container'>
-                <video></video>
-            </div>
-            <div id='audios-container'></div>
-            <button
-                onClick={() => {
-                    this.toggleScreenShare()
-                    // this.connection.session.audio = true;
-                    // this.connection.session.video = true;
-                    //
-                    // this.connection.addStream({
-                    //     audio: true, // because session.audio==true, now it works
-                    //     video: true, // because session.video==true, now it works
-                    //     oneway: true
-                    // });
-                    // var roomid = "1234"
-
-                    // this.connection.open(roomid, function(isRoomOpened, roomid, error) {
-                    // });
-                    // console.log(this.connection)
-                    // console.log(this.connection.checkPresence("1234"))
-
-
-                    // this.connection.openOrJoin(roomid, (isRoomCreated, roomid, error) => {
-                    //     if (this.connection.isInitiator === true) {
-                    //         console.log("opened room")
-                    //     } else {
-                    //         console.log("joined room")
-                    //     }
-                    // });
-
-                    // this.connection.open(roomid)
-
-                    // this.connection.checkPresence(roomid, (isRoomExist, roomid) => {
-                    //     if (isRoomExist === true) {
-                    //         console.log("joined room")
-                    //         this.connection.join(roomid);
-                    //     } else {
-                    //         console.log("opened room")
-                    //         this.connection.open(roomid);
-                    //     }
-                    // });
-
-                    // this.connection.session.audio = true;
-                    // this.connection.session.video = true;
-                    //
-                    // this.connection.addStream({
-                    //     audio: true, // because session.audio==true, now it works
-                    //     video: true, // because session.video==true, now it works
-                    //     oneway: true
-                    // });
-                }}
-            >Press me!</button>
-        </div>
+            <React.Fragment>
+                {this.state.roomid
+                    ?
+                    <div>
+                        This is the screen share feed
+                        <div id='videos-container'>
+                            <video></video>
+                        </div>
+                        <div id='audios-container'></div>
+                        <button
+                            onClick={() => {
+                                this.toggleScreenShare()
+                            }}
+                        >Press me!
+                        </button>
+                    </div>
+                    :
+                    <div>
+                        <input type='text' id='roomid-input' placeholder="Enter a Room ID"/>
+                        <button onClick={this.setRoomID}>Join!</button>
+                    </div>
+                }
+            </React.Fragment>
         )
     }
 
