@@ -3,9 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "getmediaelement": "^1.0.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "rtcmulticonnection": "^3.6.8",
+    "rtcmulticonnection-server": "^1.3.1",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
+    "typescript": "^3.5.1",
+    "webrtc-scalable-broadcast": "^1.0.5",
+    "webrtc-screen-capturing": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -27,5 +35,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^1.9.0",
+    "eslint-plugin-import": "^2.17.3"
   }
 }
