@@ -151,7 +151,7 @@ class ScreenShareSession extends React.Component {
 
 
     setRoomID = () => {
-        let input = document.getElementById('roomid-input').value
+        let input = this.props.match.params.id
         console.log(input)
         this.setState({roomid: input})
         this.makeOrJoinRoom(input)
@@ -180,16 +180,37 @@ class ScreenShareSession extends React.Component {
 
     }
 
-    exitRoom = () => {
+    endScreenFeed = () => {
         console.log(this.state.screenCaptureStream)
         // this.connection.removeStream(this.state.screenCaptureStream.id)
-        this.removePeerStreams(this.state.screenCaptureStream.id)
-        this.state.screenCaptureStream.stop()
+        if (this.state.screenCaptureStream) {
+            this.removePeerStreams(this.state.screenCaptureStream.id)
+            this.state.screenCaptureStream.stop()
+        }
         this.connection.closeSocket()
         this.setState({roomid: null})
     }
 
+    exitRoom = () => {
+        this.endScreenFeed()
+        this.props.history.push(`/`)
+    }
+
+    getUrlParams = () => {
+        // let search = window.location.search
+        // let params = new URLSearchParams(search)
+        // let room_id = params.get('room')
+        // console.log(room_id)
+        // this.setState({roomid: room_id})
+        console.log(`ID Param: ${this.props.match.params.id}`)
+    }
+
+    // componentWillMount() {
+    //     this.getUrlParams()
+    // }
+
     componentDidMount() {
+        this.setRoomID()
         window.addEventListener("load", () => {
             // this.setState({videosContainer : document.getElementById('videos-container')})
             this.connection.videosContainer = document.getElementById('videos-container');
@@ -200,33 +221,47 @@ class ScreenShareSession extends React.Component {
     }
 
     render() {
-
+        console.log(`ID Param: ${this.props.match.params.id}`)
         return (
             <React.Fragment>
-                {this.state.roomid
-                    ?
-                    <div>
-                        This is the screen share feed
-                        <div id='videos-container'>
-                            <video controls></video>
-                        </div>
-                        <div id='audios-container'></div>
-                        <button
-                            onClick={() => {
-                                this.toggleScreenShare()
-                            }}
-                        >Share Screen
-                        </button>
-                        <button onClick={this.exitRoom}>Exit</button>
+                {/*{this.state.roomid*/}
+                    {/*?*/}
+                    {/*<div>*/}
+                        {/*This is the screen share feed*/}
+                        {/*<div id='videos-container'>*/}
+                            {/*<video controls></video>*/}
+                        {/*</div>*/}
+                        {/*<div id='audios-container'></div>*/}
+                        {/*<button*/}
+                            {/*onClick={() => {*/}
+                                {/*this.toggleScreenShare()*/}
+                            {/*}}*/}
+                        {/*>Share Screen*/}
+                        {/*</button>*/}
+                        {/*<button onClick={this.exitRoom}>Exit</button>*/}
+                    {/*</div>*/}
+                    {/*:*/}
+                    {/*<div>*/}
+                        {/*<form onSubmit={this.setRoomID}>*/}
+                            {/*<input type='text' id='roomid-input' placeholder="Enter a Room ID"/>*/}
+                            {/*<input type="submit" value="Join Room" />*/}
+                        {/*</form>*/}
+                    {/*</div>*/}
+                {/*}*/}
+                <div>
+                    This is the screen share feed
+                    <div id='videos-container'>
+                        <video controls></video>
                     </div>
-                    :
-                    <div>
-                        <form onSubmit={this.setRoomID}>
-                            <input type='text' id='roomid-input' placeholder="Enter a Room ID"/>
-                            <input type="submit" value="Join Room" />
-                        </form>
-                    </div>
-                }
+                    <div id='audios-container'></div>
+                    <button
+                        onClick={() => {
+                            this.toggleScreenShare()
+                        }}
+                    >Share Screen
+                    </button>
+                    <button onClick={this.exitRoom}>Exit</button>
+                </div>
             </React.Fragment>
         )
     }
