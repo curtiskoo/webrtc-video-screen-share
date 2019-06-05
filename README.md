@@ -1,3 +1,10 @@
+## Currently Hosted On
+
+https://webrtc-uwu.herokuapp.com/
+
+Notes:  <br>
+Currently only support for desktop + Chrome browser
+
 ## Available Scripts
 
 In the project directory, you can run:
