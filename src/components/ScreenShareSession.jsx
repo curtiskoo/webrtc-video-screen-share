@@ -12,6 +12,7 @@ class ScreenShareSession extends React.Component {
             videosContainer: null,
             roomid: null,
             screenCaptureStream: null,
+            message: null,
         }
 
         this.connection = new RTCMultiConnection
@@ -38,7 +39,7 @@ class ScreenShareSession extends React.Component {
         // this.connection.audiosContainer = document.getElementById('audios-container');
 
         this.connection.onmessage = (event) => {
-            alert(`${event.userid}: ${event.data}`)
+            console.log(`${event.userid}: ${event.data}`)
         }
 
         this.connection.onstream = (event) => {
@@ -200,9 +201,13 @@ class ScreenShareSession extends React.Component {
         this.props.history.push(`/`)
     }
 
-    sendMessage = () => {
-        let input = document.getElementById('message-input').value
+    sendMessage = (e) => {
+        e.preventDefault()
+        let elem = document.getElementById('message-input')
+        let input = elem.value
         this.connection.send(input)
+        console.log(input)
+        elem.value = ""
     }
 
     componentDidMount() {
@@ -259,7 +264,7 @@ class ScreenShareSession extends React.Component {
                     <button onClick={this.exitRoom}>Exit</button>
                     <form onSubmit={this.sendMessage}>
                         <input type='text' id='message-input' placeholder="Send a message"/>
-                        <input type="submit" value="Send" />
+                        <input type="submit" value="Send"/>
                     </form>
                 </div>
             </React.Fragment>
