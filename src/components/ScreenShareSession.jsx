@@ -37,6 +37,10 @@ class ScreenShareSession extends React.Component {
         // this.connection.videosContainer = document.getElementById('videos-container');
         // this.connection.audiosContainer = document.getElementById('audios-container');
 
+        this.connection.onmessage = (event) => {
+            alert(`${event.userid}: ${event.data}`)
+        }
+
         this.connection.onstream = (event) => {
             console.log('onstream')
             if(event.type === 'remote' && !this.connection.session.video) {
@@ -196,18 +200,10 @@ class ScreenShareSession extends React.Component {
         this.props.history.push(`/`)
     }
 
-    getUrlParams = () => {
-        // let search = window.location.search
-        // let params = new URLSearchParams(search)
-        // let room_id = params.get('room')
-        // console.log(room_id)
-        // this.setState({roomid: room_id})
-        console.log(`ID Param: ${this.props.match.params.id}`)
+    sendMessage = () => {
+        let input = document.getElementById('message-input').value
+        this.connection.send(input)
     }
-
-    // componentWillMount() {
-    //     this.getUrlParams()
-    // }
 
     componentDidMount() {
         this.setRoomID()
@@ -261,6 +257,10 @@ class ScreenShareSession extends React.Component {
                     >Share Screen
                     </button>
                     <button onClick={this.exitRoom}>Exit</button>
+                    <form onSubmit={this.sendMessage}>
+                        <input type='text' id='message-input' placeholder="Send a message"/>
+                        <input type="submit" value="Send" />
+                    </form>
                 </div>
             </React.Fragment>
         )
