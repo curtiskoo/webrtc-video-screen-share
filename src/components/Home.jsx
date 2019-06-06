@@ -20,6 +20,11 @@ class Home extends React.Component {
         }
     }
 
+    setUserName = () => {
+        let input = document.getElementById('username-input').value
+        this.props.username(input)
+    }
+
 
     render() {
         console.log("Home")
@@ -27,6 +32,7 @@ class Home extends React.Component {
             <div>
                 <form onSubmit={this.setRoomID}>
                     <input type='text' id='roomid-input' placeholder="Enter a Room ID"/>
+                    <input type='text' id='username-input' placeholder="Enter a Username"/>
                     <input type="submit" value="Join Room" />
                 </form>
             </div>
