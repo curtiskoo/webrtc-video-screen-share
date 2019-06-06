@@ -1,8 +1,6 @@
 import React from "react";
 import RTCMultiConnection from "rtcmulticonnection"
 import io from "socket.io-client"
-import { withRouter } from 'react-router-dom';
-
 
 window.io = io;
 
@@ -276,4 +274,4 @@ class ScreenShareSession extends React.Component {
 
 }
 
-export default withRouter(ScreenShareSession);
+export default ScreenShareSession;
