@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from 'react-router-dom';
 
 class Home extends React.Component {
     constructor(props) {
@@ -21,18 +22,27 @@ class Home extends React.Component {
     }
 
     setUserName = () => {
-        let input = document.getElementById('username-input').value
-        this.props.username(input)
+        let elem = document.getElementById('username-input')
+        if (elem != null) {
+            let input = elem.value
+            this.props.getUserName(input)
+        }
     }
 
 
     render() {
         console.log("Home")
+        console.log(this.props)
         return (
             <div>
-                <form onSubmit={this.setRoomID}>
+                <form onSubmit={() => {
+                    this.setRoomID();
+                    this.setUserName();
+                }}>
                     <input type='text' id='roomid-input' placeholder="Enter a Room ID"/>
-                    <input type='text' id='username-input' placeholder="Enter a Username"/>
+                    {!this.props.username &&
+                        <input type='text' id='username-input' placeholder="Enter a Username"/>
+                    }
                     <input type="submit" value="Join Room" />
                 </form>
             </div>
@@ -40,4 +50,4 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+export default withRouter(Home);

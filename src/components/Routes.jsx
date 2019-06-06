@@ -8,7 +8,7 @@ class Routes extends React.Component {
         super(props)
 
         this.state = {
-            username: "bob",
+            username: null,
         }
     }
 
@@ -17,11 +17,18 @@ class Routes extends React.Component {
         return (
             <Switch>
                 <Route exact path="/" render={(props) =>
-                    <div>
-                    <Home {...props} getUserName={(s) => this.setState({username : s})}/>
-                        {this.state.username}
-                    </div>}/>
-                <Route path="/room/:id/" component={ScreenShareSession}/>
+                    <Home {...props}
+                          getUserName={
+                              (s) => this.setState({username : s})
+                          }
+                          username={this.state.username}/>
+                    }
+                />
+                <Route path="/room/:id/"
+                       render={(props) =>
+                           <ScreenShareSession {...props} username={this.state.username}/>
+                       }
+                />
                 {/*<Route component={Home}>*/}
                     {/*<Redirect to="/"/>*/}
                 {/*</Route>*/}

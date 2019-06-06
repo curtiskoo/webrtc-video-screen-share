@@ -1,6 +1,8 @@
 import React from "react";
 import RTCMultiConnection from "rtcmulticonnection"
 import io from "socket.io-client"
+import { withRouter } from 'react-router-dom';
+
 
 window.io = io;
 
@@ -222,7 +224,8 @@ class ScreenShareSession extends React.Component {
     }
 
     render() {
-        console.log(`ID Param: ${this.props.match.params.id}`)
+        // console.log(`ID Param: ${this.props.match.params.id}`)
+        console.log(this.props)
         return (
             <React.Fragment>
                 {/*{this.state.roomid*/}
@@ -273,4 +276,4 @@ class ScreenShareSession extends React.Component {
 
 }
 
-export default ScreenShareSession;
+export default withRouter(ScreenShareSession);
