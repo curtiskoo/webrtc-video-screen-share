@@ -25,6 +25,7 @@ class Home extends React.Component {
         if (elem != null) {
             let input = elem.value
             this.props.getUserName(input)
+            localStorage.setItem('username', input)
         }
     }
 
@@ -32,6 +33,7 @@ class Home extends React.Component {
     render() {
         console.log("Home")
         console.log(this.props)
+        console.log(`Local Storage: ${localStorage.getItem('username')}`)
         return (
             <div>
                 <form onSubmit={() => {
