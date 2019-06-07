@@ -13,9 +13,7 @@ class Routes extends React.Component {
         }
     }
 
-
     render() {
-        console.log(this.props)
         return (
             <Switch>
                 <Route exact path="/" render={(props) =>

@@ -1,7 +1,7 @@
 import React from "react";
 import RTCMultiConnection from "rtcmulticonnection"
 import io from "socket.io-client"
-import Cookies from 'universal-cookie';
+import MessageList from "./MessageList";
 
 window.io = io;
 
@@ -13,8 +13,7 @@ class ScreenShareSession extends React.Component {
             videosContainer: null,
             roomid: null,
             screenCaptureStream: null,
-            message: null,
-            cookies: new Cookies(),
+            messages: [],
         }
 
         this.connection = new RTCMultiConnection
@@ -41,7 +40,8 @@ class ScreenShareSession extends React.Component {
         // this.connection.audiosContainer = document.getElementById('audios-container');
 
         this.connection.onmessage = (event) => {
-            console.log(`${event.userid}: ${event.data}`)
+            // console.log(`${event.userid}: ${event.data}`)
+            this.collectMessage(event.data)
         }
 
         this.connection.onstream = (event) => {
@@ -207,9 +207,22 @@ class ScreenShareSession extends React.Component {
         e.preventDefault()
         let elem = document.getElementById('message-input')
         let input = elem.value
-        this.connection.send(input)
-        console.log(input)
+        let message = {
+            id : this.connection.userid,
+            username : this.props.username,
+            time: new Date(),
+            text: input,
+        }
+        this.connection.send(message)
+        this.collectMessage(message)
         elem.value = ""
+    }
+
+    collectMessage = (message) => {
+        let messages = this.state.messages
+        messages.push(message)
+        console.log(message)
+        this.setState({messages: messages})
     }
 
     componentDidMount() {
@@ -254,7 +267,7 @@ class ScreenShareSession extends React.Component {
                     {/*</div>*/}
                 {/*}*/}
                 <div>
-                    This is the screen share feed
+                    {/*This is the screen share feed*/}
                     <div id='videos-container'>
                         <video controls></video>
                     </div>
@@ -271,6 +284,7 @@ class ScreenShareSession extends React.Component {
                         <input type="submit" value="Send"/>
                     </form>
                 </div>
+                <MessageList {...this.props} {...this.state}/>
             </React.Fragment>
         )
     }

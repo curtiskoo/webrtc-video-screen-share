@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  background-color: #282c34;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
 .App-logo {
@@ -9,18 +12,35 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   /*align-items: center;*/
   /*justify-content: center;*/
-  font-size: calc(10px + 2vmin);
-  color: white;
+  /*font-size: calc(10px + 2vmin);*/
+}
+
+.App-body {
+  display: table;
+  min-height: 90vh;
+  width: 100%;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.username-right {
+  right: 0;
+  position: relative;
+  padding: 20px;
+  font-size: calc(10px + 1vmin);
+  text-align: right;
+}
+
+.body-content {
+  display: table-cell;
+  vertical-align: middle;
 }
 
 video {
