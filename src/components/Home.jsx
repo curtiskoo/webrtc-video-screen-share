@@ -1,8 +1,11 @@
 import React from "react";
+import Cookies from 'universal-cookie';
 
 class Home extends React.Component {
     constructor(props) {
         super(props)
+
+        this.cookies = new Cookies()
 
         this.state = {
             roomid: null,
@@ -24,8 +27,8 @@ class Home extends React.Component {
         let elem = document.getElementById('username-input')
         if (elem != null) {
             let input = elem.value
-            this.props.getUserName(input)
-            localStorage.setItem('username', input)
+            // this.props.getUserName(input)
+            this.cookies.set("username", input, {path: '/'})
         }
     }
 
@@ -33,7 +36,6 @@ class Home extends React.Component {
     render() {
         console.log("Home")
         console.log(this.props)
-        console.log(`Local Storage: ${localStorage.getItem('username')}`)
         return (
             <div>
                 <form onSubmit={() => {
@@ -46,6 +48,14 @@ class Home extends React.Component {
                     }
                     <input type="submit" value="Join Room" />
                 </form>
+                {this.props.username &&
+                    <form onSubmit={(e) => {
+                        this.setUserName();
+                    }}>
+                        <input type='text' id='username-input' placeholder="Change your Username"/>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                }
             </div>
         );
     }

@@ -1,6 +1,7 @@
 import React from "react";
 import RTCMultiConnection from "rtcmulticonnection"
 import io from "socket.io-client"
+import Cookies from 'universal-cookie';
 
 window.io = io;
 
@@ -13,6 +14,7 @@ class ScreenShareSession extends React.Component {
             roomid: null,
             screenCaptureStream: null,
             message: null,
+            cookies: new Cookies(),
         }
 
         this.connection = new RTCMultiConnection
@@ -219,6 +221,7 @@ class ScreenShareSession extends React.Component {
             this.setState({videosContainer : this.connection.videosContainer})
         })
         this.connection.audiosContainer = document.getElementById('audios-container');
+        console.log(this.props.username)
     }
 
     render() {
