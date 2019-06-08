@@ -12,7 +12,7 @@ class MessageList extends React.Component {
         return (
             <div className="message-list">
                 {this.props.messages &&
-                <ul>
+                <ul className="message-inner-list">
                     {this.props.messages.map((message, index) => (
                             <li key={index}>
                                 <h4 className="message-sender">{message.username}</h4>

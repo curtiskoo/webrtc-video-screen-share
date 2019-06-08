@@ -268,23 +268,27 @@ class ScreenShareSession extends React.Component {
                 {/*}*/}
                 <div>
                     {/*This is the screen share feed*/}
-                    <div id='videos-container'>
-                        <video controls></video>
+                    <div>
+                        <div id='videos-container'>
+                            <video controls></video>
+                        </div>
+                        <div id='audios-container'></div>
+                        <button
+                            onClick={() => {
+                                this.toggleScreenShare()
+                            }}
+                        >Share Screen
+                        </button>
+                        <button onClick={this.exitRoom}>Exit</button>
                     </div>
-                    <div id='audios-container'></div>
-                    <button
-                        onClick={() => {
-                            this.toggleScreenShare()
-                        }}
-                    >Share Screen
-                    </button>
-                    <button onClick={this.exitRoom}>Exit</button>
-                    <form onSubmit={this.sendMessage}>
+                </div>
+                <div className="message-container">
+                    <MessageList {...this.props} {...this.state}/>
+                    <form className="message-submit" onSubmit={this.sendMessage}>
                         <input type='text' id='message-input' placeholder="Send a message"/>
                         <input type="submit" value="Send"/>
                     </form>
                 </div>
-                <MessageList {...this.props} {...this.state}/>
             </React.Fragment>
         )
     }

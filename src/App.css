@@ -38,9 +38,31 @@
   text-align: right;
 }
 
+.message-container {
+  position: fixed;
+  right: 0;
+  height: 100%;
+  bottom: 0;
+  width: 250px;
+  background-color: lightslategrey;
+}
+
+.message-inner-list {
+  overflow-y: auto;
+  max-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.message-submit {
+  position: fixed;
+  bottom: 0;
+}
+
 .body-content {
   display: table-cell;
   vertical-align: middle;
+  position: relative;
 }
 
 video {
