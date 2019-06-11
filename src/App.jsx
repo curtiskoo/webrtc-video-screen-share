@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Routes from "./components/Routes";
 import Cookies from 'universal-cookie';
+import AppBar from '@material-ui/core/AppBar';
 
 class App extends React.Component {
     constructor(props) {
@@ -35,7 +36,7 @@ class App extends React.Component {
     render() {
     return (
         <div className="App">
-            <header className="App-header">
+            <AppBar color="default">
                 {/*<div>Hello World, CK React App</div>*/}
                 <div className="username-right">
                     {this.state.username &&
@@ -52,11 +53,9 @@ class App extends React.Component {
                         <input type="submit" value="Submit"/>
                     </form>
                 </div>
-            </header>
+            </AppBar>
             <body className="App-body">
-                <div className="body-content">
                     <Routes {...this.state}/>
-                </div>
             </body>
         </div>
     );

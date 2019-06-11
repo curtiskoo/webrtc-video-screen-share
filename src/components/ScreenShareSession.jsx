@@ -2,6 +2,9 @@ import React from "react";
 import RTCMultiConnection from "rtcmulticonnection"
 import io from "socket.io-client"
 import MessageList from "./MessageList";
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import TextField from '@material-ui/core/TextField';
 
 window.io = io;
 
@@ -266,29 +269,32 @@ class ScreenShareSession extends React.Component {
                         {/*</form>*/}
                     {/*</div>*/}
                 {/*}*/}
-                <div>
+
                     {/*This is the screen share feed*/}
-                    <div>
-                        <div id='videos-container'>
-                            <video controls></video>
-                        </div>
-                        <div id='audios-container'></div>
-                        <button
-                            onClick={() => {
-                                this.toggleScreenShare()
-                            }}
-                        >Share Screen
-                        </button>
-                        <button onClick={this.exitRoom}>Exit</button>
+                <div className="display-stream-container">
+                    <div id='videos-container'>
+                        <video controls></video>
                     </div>
+                    <div id='audios-container'></div>
+                    <button
+                        onClick={() => {
+                            this.toggleScreenShare()
+                        }}
+                    >Share Screen
+                    </button>
+                    <button onClick={this.exitRoom}>Exit</button>
                 </div>
-                <div className="message-container">
+
+                <Card className="message-container">
+                    <CardHeader title="Stream Chat"/>
                     <MessageList {...this.props} {...this.state}/>
+                    <Card>
                     <form className="message-submit" onSubmit={this.sendMessage}>
                         <input type='text' id='message-input' placeholder="Send a message"/>
                         <input type="submit" value="Send"/>
                     </form>
-                </div>
+                    </Card>
+                </Card>
             </React.Fragment>
         )
     }
