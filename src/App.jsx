@@ -3,6 +3,7 @@ import './App.css';
 import Routes from "./components/Routes";
 import Cookies from 'universal-cookie';
 import AppBar from '@material-ui/core/AppBar';
+import {getRandomUsername, printAnimals} from "./username";
 
 class App extends React.Component {
     constructor(props) {
@@ -30,6 +31,13 @@ class App extends React.Component {
             this.cookies.set("username", input, {path: '/'})
             this.changeUsername()
             elem.value = ""
+        }
+    }
+
+    componentDidMount() {
+        if (!this.cookies.get('username')) {
+            this.cookies.set("username", getRandomUsername(), {path: '/'})
+            this.changeUsername()
         }
     }
 
