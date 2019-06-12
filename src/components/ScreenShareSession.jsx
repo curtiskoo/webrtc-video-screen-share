@@ -5,6 +5,7 @@ import MessageList from "./MessageList";
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import TextField from '@material-ui/core/TextField';
+import {scrollToBottom} from "../methods";
 
 window.io = io;
 
@@ -225,7 +226,9 @@ class ScreenShareSession extends React.Component {
         let messages = this.state.messages
         messages.push(message)
         console.log(message)
-        this.setState({messages: messages})
+        this.setState({messages: messages}, () => {
+                scrollToBottom("message-inner-list")
+            })
     }
 
     componentDidMount() {
@@ -288,11 +291,11 @@ class ScreenShareSession extends React.Component {
                 <Card className="message-container">
                     <CardHeader title="Stream Chat"/>
                     <MessageList {...this.props} {...this.state}/>
-                    <Card>
-                    <form className="message-submit" onSubmit={this.sendMessage}>
-                        <input type='text' id='message-input' placeholder="Send a message"/>
-                        <input type="submit" value="Send"/>
-                    </form>
+                    <Card className="message-submit">
+                        <form onSubmit={this.sendMessage}>
+                            <input type='text' id='message-input' placeholder="Send a message" autoComplete="off"/>
+                            <input type="submit" value="Send"/>
+                        </form>
                     </Card>
                 </Card>
             </React.Fragment>
