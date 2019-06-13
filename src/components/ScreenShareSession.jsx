@@ -42,6 +42,10 @@ class ScreenShareSession extends React.Component {
 
         // this.connection.videosContainer = document.getElementById('videos-container');
         // this.connection.audiosContainer = document.getElementById('audios-container');
+        this.connection.onopen = (event) => {
+            console.log('WebRTC app opened!');
+            this.getExistingMessages()
+        };
 
         this.connection.onmessage = (event) => {
             // console.log(`${event.userid}: ${event.data}`)
@@ -154,10 +158,6 @@ class ScreenShareSession extends React.Component {
                 connection.open(roomid);
             }
         });
-
-        connection.onopen = function(event) {
-            console.log('WebRTC app opened!');
-        };
     }
 
 
@@ -226,9 +226,31 @@ class ScreenShareSession extends React.Component {
         let messages = this.state.messages
         messages.push(message)
         console.log(message)
+        this.setExtraMessages(messages)
+    }
+
+    setExtraMessages = (messages) => {
         this.setState({messages: messages}, () => {
-                scrollToBottom("message-inner-list")
-            })
+            scrollToBottom("message-inner-list")
+            this.connection.extra.messages = this.state.messages
+            this.connection.updateExtraData()
+        })
+    }
+
+    getExistingMessages = () => {
+        let peers = Array.from(this.connection.getAllParticipants())
+        peers = peers.filter(p => this.connection.peers[p].extra.messages != null)
+        console.log(peers)
+        for (let i = 0; i < peers.length; i++) {
+            console.log(`Already in channel: ${peers[i]}`)
+            if (this.connection.peers[peers[i]].extra.messages) {
+                let messages = this.connection.peers[peers[i]].extra.messages
+                console.log(messages)
+                this.setExtraMessages(messages)
+                break
+            }
+        }
+        // this.connection.extra.messages = this.state.messages
     }
 
     componentDidMount() {
@@ -246,6 +268,8 @@ class ScreenShareSession extends React.Component {
     render() {
         // console.log(`ID Param: ${this.props.match.params.id}`)
         console.log(this.props)
+        console.log(this.connection)
+        console.log(this.state)
         return (
             <React.Fragment>
                 {/*{this.state.roomid*/}
