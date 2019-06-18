@@ -126,6 +126,7 @@ video {
     position: fixed;
     bottom: 0;
     width: inherit;
+    height: auto;
   }
 
 }
