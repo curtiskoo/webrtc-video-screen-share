@@ -92,28 +92,39 @@ video {
   max-height: 80vh;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @media (orientation:portrait) {
-  .display-stream-container {
+
+  .App-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+    width: 100%;
     position: absolute;
+    bottom: 0;
+  }
+
+  .display-stream-container {
+    position: relative;
     width: 100%;
     margin-top: 15px;
   }
 
   .message-container {
-    position: fixed;
+    position: relative;
     height: 30%;
     bottom: 0;
     width: 100%;
     background-color: lightslategrey;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .message-list {
+    margin: 0px;
+    height: calc(100% - 63px - 30px);
+    position: initial;
+    flex: 1;
   }
 
   video {
@@ -126,7 +137,28 @@ video {
     position: fixed;
     bottom: 0;
     width: inherit;
-    height: auto;
+    height: 35px;
   }
 
+  #message-inner-list {
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    max-height: calc(100% - 63px - 30px);
+    height: calc(100% - 63px - 30px);
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+  }
+
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
