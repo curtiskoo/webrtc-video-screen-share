@@ -6,6 +6,7 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import TextField from '@material-ui/core/TextField';
 import {scrollToBottom} from "../methods";
+import SessionAppBar from "./SessionAppBar";
 
 window.io = io;
 
@@ -250,7 +251,6 @@ class ScreenShareSession extends React.Component {
                 break
             }
         }
-        // this.connection.extra.messages = this.state.messages
     }
 
     componentDidMount() {
@@ -266,54 +266,31 @@ class ScreenShareSession extends React.Component {
     }
 
     render() {
-        // console.log(`ID Param: ${this.props.match.params.id}`)
         console.log(this.props)
         console.log(this.connection)
         console.log(this.state)
         return (
             <React.Fragment>
-                {/*{this.state.roomid*/}
-                    {/*?*/}
-                    {/*<div>*/}
-                        {/*This is the screen share feed*/}
-                        {/*<div id='videos-container'>*/}
-                            {/*<video controls></video>*/}
-                        {/*</div>*/}
-                        {/*<div id='audios-container'></div>*/}
-                        {/*<button*/}
-                            {/*onClick={() => {*/}
-                                {/*this.toggleScreenShare()*/}
-                            {/*}}*/}
-                        {/*>Share Screen*/}
-                        {/*</button>*/}
-                        {/*<button onClick={this.exitRoom}>Exit</button>*/}
-                    {/*</div>*/}
-                    {/*:*/}
-                    {/*<div>*/}
-                        {/*<form onSubmit={this.setRoomID}>*/}
-                            {/*<input type='text' id='roomid-input' placeholder="Enter a Room ID"/>*/}
-                            {/*<input type="submit" value="Join Room" />*/}
-                        {/*</form>*/}
-                    {/*</div>*/}
-                {/*}*/}
-
-                    {/*This is the screen share feed*/}
                 <div className="display-stream-container">
                     <div id='videos-container'>
                         <video controls></video>
                     </div>
                     <div id='audios-container'></div>
-                    <button
-                        onClick={() => {
-                            this.toggleScreenShare()
-                        }}
-                    >Share Screen
-                    </button>
-                    <button onClick={this.exitRoom}>Exit</button>
+
+                    <div className="room-buttons-desktop">
+                        <button
+                            onClick={() => {
+                                this.toggleScreenShare()
+                            }}
+                        >Share Screen
+                        </button>
+                        <button onClick={this.exitRoom}>Exit</button>
+                    </div>
+
                 </div>
 
                 <Card className="message-container">
-                    <CardHeader title="Stream Chat"/>
+                    <SessionAppBar exitRoom={this.exitRoom}/>
                     <MessageList {...this.props} {...this.state}/>
                     <Card className="message-submit">
                         <form onSubmit={this.sendMessage}>
