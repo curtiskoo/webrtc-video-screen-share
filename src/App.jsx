@@ -39,12 +39,16 @@ class App extends React.Component {
             this.cookies.set("username", getRandomUsername(), {path: '/'})
             this.changeUsername()
         }
+
+        // window.addEventListener("load",function() {
+        //     window.scrollTo(0,1);
+        // });
     }
 
     render() {
     return (
         <div className="App">
-            <AppBar color="default">
+            <AppBar color="default" position="relative">
                 {/*<div>Hello World, CK React App</div>*/}
                 <div className="username-right">
                     {this.state.username &&
