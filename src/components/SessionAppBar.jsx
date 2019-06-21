@@ -5,12 +5,45 @@ import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class SessionAppBar extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            menuOpen: false,
+            menuAnchor: null,
+            menuSelectedIndex: 0
+        }
+
+        this.menuOptions = [
+            "Stream Chat",
+            "Voice Call",
+            "Test This"
+        ]
+    }
+
+    handleMenuItemClick = (event, index) => {
+        this.setState({
+            menuSelectedIndex: index,
+            menuOpen: false,
+            // menuAnchor: null,
+        })
+    }
+
+    handleMenuClick = (event) => {
+        this.setState({
+            menuOpen: !this.state.menuOpen,
+            menuAnchor: event.target
+        })
+    }
+
+    handleMenuClose = () => {
+        this.setState({
+            menuOpen: false,
+            menuAnchor: null,
+        })
     }
 
     render() {
@@ -33,10 +66,29 @@ class SessionAppBar extends React.Component {
                     </div>
 
                     <div class="sessionappbar-toolbar-right">
-                        <IconButton>
+                        <IconButton onClick={this.handleMenuClick}>
                             <MenuIcon/>
                         </IconButton>
                     </div>
+                    <Menu
+                        id="stream-menu"
+                        anchorEl={this.state.menuAnchor}
+                        // keepMounted
+                        disableAutoFocusItem={true}
+                        open={this.state.menuOpen}
+                        onClose={this.handleMenuClose}
+                        variant="menu"
+                    >
+                        {this.menuOptions.map((option, index) => (
+                            <MenuItem
+                                selected={index === this.state.menuSelectedIndex}
+                                onClick={(event) => {this.handleMenuItemClick(event, index)}}
+                            >
+                                {option}
+                            </MenuItem>
+                        ))
+                        }
+                    </Menu>
                 </Toolbar>
             </AppBar>
         )
