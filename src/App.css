@@ -120,6 +120,10 @@
   z-index: 100;
 }
 
+.call-fab {
+  margin: auto !important;
+}
+
 video {
   max-width: 95%;
   width: 95%;

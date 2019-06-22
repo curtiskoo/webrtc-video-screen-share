@@ -3,10 +3,10 @@ import RTCMultiConnection from "rtcmulticonnection"
 import io from "socket.io-client"
 import MessageList from "./MessageList";
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import TextField from '@material-ui/core/TextField';
 import {scrollToBottom} from "../methods";
 import SessionAppBar from "./SessionAppBar";
+import Fab from '@material-ui/core/Fab';
+import CallIcon from '@material-ui/icons/Call';
 
 window.io = io;
 
@@ -19,6 +19,7 @@ class ScreenShareSession extends React.Component {
             roomid: null,
             screenCaptureStream: null,
             messages: [],
+            contentDisplay: "Stream Chat",
         }
 
         this.connection = new RTCMultiConnection
@@ -253,6 +254,10 @@ class ScreenShareSession extends React.Component {
         }
     }
 
+    changeContent = (listItem) => {
+        this.setState({contentDisplay: listItem})
+    }
+
     componentDidMount() {
         this.setRoomID()
         window.addEventListener("load", () => {
@@ -290,14 +295,29 @@ class ScreenShareSession extends React.Component {
                 </div>
 
                 <Card className="message-container">
-                    <SessionAppBar exitRoom={this.exitRoom}/>
-                    <MessageList {...this.props} {...this.state}/>
-                    <Card className="message-submit">
-                        <form onSubmit={this.sendMessage}>
-                            <input type='text' id='message-input' placeholder="Send a message" autoComplete="off"/>
-                            <input type="submit" value="Send"/>
-                        </form>
-                    </Card>
+                    <SessionAppBar exitRoom={this.exitRoom} changeContent={this.changeContent} {...this.state}/>
+
+                    {(this.state.contentDisplay === "Stream Chat") &&
+                        <React.Fragment>
+                            <MessageList {...this.props} {...this.state}/>
+                            <Card className="message-submit">
+                                <form onSubmit={this.sendMessage}>
+                                    <input type='text' id='message-input' placeholder="Send a message" autoComplete="off"/>
+                                    <input type="submit" value="Send"/>
+                                </form>
+                            </Card>
+                        </React.Fragment>
+                    }
+
+                    {(this.state.contentDisplay === "Voice Call") &&
+                        <React.Fragment>
+                            <Fab variant="extended" color="primary" className="call-fab">
+                                <CallIcon />
+                                Join Call
+                            </Fab>
+                        </React.Fragment>
+                    }
+
                 </Card>
             </React.Fragment>
         )

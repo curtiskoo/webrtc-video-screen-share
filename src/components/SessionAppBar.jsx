@@ -30,6 +30,7 @@ class SessionAppBar extends React.Component {
             menuOpen: false,
             // menuAnchor: null,
         })
+        this.props.changeContent(this.menuOptions[index])
     }
 
     handleMenuClick = (event) => {
@@ -61,7 +62,7 @@ class SessionAppBar extends React.Component {
                         <Typography variant="h6"
                                     color="textPrimary"
                         >
-                            Stream Chat
+                            {this.props.contentDisplay}
                         </Typography>
                     </div>
 
@@ -82,7 +83,9 @@ class SessionAppBar extends React.Component {
                         {this.menuOptions.map((option, index) => (
                             <MenuItem
                                 selected={index === this.state.menuSelectedIndex}
-                                onClick={(event) => {this.handleMenuItemClick(event, index)}}
+                                onClick={(event) => {
+                                    this.handleMenuItemClick(event, index)
+                                }}
                             >
                                 {option}
                             </MenuItem>
