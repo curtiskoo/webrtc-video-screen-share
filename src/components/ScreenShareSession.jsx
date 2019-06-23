@@ -3,7 +3,7 @@ import RTCMultiConnection from "rtcmulticonnection"
 import io from "socket.io-client"
 import MessageList from "./MessageList";
 import Card from '@material-ui/core/Card';
-import {scrollToBottom} from "../methods";
+import {makeOrJoinRoom, scrollToBottom} from "../methods";
 import SessionAppBar from "./SessionAppBar";
 import VoiceCall from "./VoiceCall";
 
@@ -25,8 +25,6 @@ class ScreenShareSession extends React.Component {
 
 
         this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-        // this.connection.socketURL = 'http://localhost:9001/';
-        // this.connection.socketURL = 'https://webrtcweb.com:9002/';
 
         this.connection.socketMessageEvent = 'audio-plus-screen-sharing-demo';
         this.connection.session = {
@@ -55,17 +53,33 @@ class ScreenShareSession extends React.Component {
 
         this.connection.onstream = (event) => {
             console.log('onstream')
+            let streamtype;
             if(event.type === 'remote' && !this.connection.session.video) {
                 // document.getElementById('btn-add-video').disabled = false;
             }
-            console.log(event.mediaElement)
+            console.log(event.mediaElement.nodeName)
             console.log(event)
-
-            var video = document.querySelector('video')
-            console.log(video)
-            video.srcObject = event.stream
-            video.play()
-            video.muted = false
+            if (event.mediaElement.nodeName === "VIDEO") {
+                streamtype = document.querySelector('video')
+                streamtype.srcObject = event.stream
+                streamtype.play()
+                streamtype.muted = false
+            } else if (event.mediaElement.nodeName === "AUDIO") {
+                streamtype = document.getElementById('audio-only')
+                // streamtype.srcObject = event.stream
+                // streamtype.play()
+                // if (event.type === 'remote') {
+                //     streamtype.muted = true
+                //     streamtype.volume = 0
+                //     console.log('here')
+                // } else {
+                //     console.log('here too')
+                //     streamtype.volume = 0
+                //     streamtype.muted = true
+                //     console.log(streamtype)
+                // }
+            }
+            console.log(streamtype)
 
             // setTimeout(function() {
             //     event.mediaElement.media.load();
@@ -127,32 +141,11 @@ class ScreenShareSession extends React.Component {
         }
     }
 
-     makeOrJoinRoom = (roomid) => {
-        var connection = this.connection
-
-        connection.session = {
-            data: true
-        };
-
-        console.log('checking presence...');
-        connection.checkPresence(roomid, function(roomExist, roomid) {
-            console.log('Room exists=' + roomExist);
-            if (roomExist === true) {
-                console.log('I am a participant');
-                connection.join(roomid);
-            } else {
-                console.log('I am the moderator');
-                connection.open(roomid);
-            }
-        });
-    }
-
-
     setRoomID = () => {
         let input = this.props.match.params.id
         console.log(input)
         this.setState({roomid: input})
-        this.makeOrJoinRoom(input)
+        makeOrJoinRoom(input, this.connection, {data : true})
     }
 
     removePeerStreams = (stream_id) => {
@@ -265,7 +258,9 @@ class ScreenShareSession extends React.Component {
                     <div id='videos-container'>
                         <video controls></video>
                     </div>
-                    <div id='audios-container'></div>
+                    <div id='audios-container'>
+                        {/*<video id='audio-only'></video>*/}
+                    </div>
 
                     <div className="room-buttons-desktop">
                         <button
@@ -295,7 +290,7 @@ class ScreenShareSession extends React.Component {
                     }
 
                     {(this.state.contentDisplay === "Voice Call") &&
-                        <VoiceCall connection={this.connection}/>
+                        <VoiceCall connection={this.connection} {...this.state}/>
                     }
 
                 </Card>

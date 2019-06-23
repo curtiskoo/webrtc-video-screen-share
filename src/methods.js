@@ -8,3 +8,21 @@ export function scrollToBottom(id) {
 export function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+// RTC related functions
+
+export function makeOrJoinRoom(roomid, connection, sessionParams) {
+    connection.session = sessionParams
+
+    console.log('checking presence...');
+    connection.checkPresence(roomid, function(roomExist, roomid) {
+        console.log('Room exists=' + roomExist);
+        if (roomExist === true) {
+            console.log('I am a participant');
+            connection.join(roomid);
+        } else {
+            console.log('I am the moderator');
+            connection.open(roomid);
+        }
+    });
+}
