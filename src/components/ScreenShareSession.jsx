@@ -5,8 +5,7 @@ import MessageList from "./MessageList";
 import Card from '@material-ui/core/Card';
 import {scrollToBottom} from "../methods";
 import SessionAppBar from "./SessionAppBar";
-import Fab from '@material-ui/core/Fab';
-import CallIcon from '@material-ui/icons/Call';
+import VoiceCall from "./VoiceCall";
 
 window.io = io;
 
@@ -31,7 +30,7 @@ class ScreenShareSession extends React.Component {
 
         this.connection.socketMessageEvent = 'audio-plus-screen-sharing-demo';
         this.connection.session = {
-            audio: 'two-way', // merely audio will be two-way, rest of the streams will be oneway
+            audio: true, // merely audio will be two-way, rest of the streams will be oneway
             screen: true,
             video: true,
             // oneway: true
@@ -60,21 +59,7 @@ class ScreenShareSession extends React.Component {
                 // document.getElementById('btn-add-video').disabled = false;
             }
             console.log(event.mediaElement)
-            // var width = event.mediaElement.clientWidth || this.connection.videosContainer.clientWidth;
-            // var mediaElement = getMediaElement(event.mediaElement,
-            //     {
-            //     title: event.userid,
-            //     buttons: ['full-screen'],
-            //     width: width,
-            //     showOnMouseEnter: false
-            // }
-            // );
-            // console.log(mediaElement)
-            // console.log(this.connection.videosContainer)
-            // console.log(event.stream.isScreen)
-            // console.log(event)
-            // console.log(this.connection)
-            // this.connection.videosContainer.appendChild(event.mediaElement);
+            console.log(event)
 
             var video = document.querySelector('video')
             console.log(video)
@@ -310,12 +295,7 @@ class ScreenShareSession extends React.Component {
                     }
 
                     {(this.state.contentDisplay === "Voice Call") &&
-                        <React.Fragment>
-                            <Fab variant="extended" color="primary" className="call-fab">
-                                <CallIcon />
-                                Join Call
-                            </Fab>
-                        </React.Fragment>
+                        <VoiceCall connection={this.connection}/>
                     }
 
                 </Card>
