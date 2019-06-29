@@ -19,6 +19,10 @@ class ScreenShareSession extends React.Component {
             screenCaptureStream: null,
             messages: [],
             contentDisplay: "Stream Chat",
+            voicePeers: [],
+            voiceStreaming: false,
+            voiceMuted: false,
+            voiceSession: null,
         }
 
         this.connection = new RTCMultiConnection
@@ -48,7 +52,15 @@ class ScreenShareSession extends React.Component {
 
         this.connection.onmessage = (event) => {
             // console.log(`${event.userid}: ${event.data}`)
-            this.collectMessage(event.data)
+            console.log(event)
+            if (event.data.message) {
+                console.log("message!")
+                this.collectMessage(event.data)
+            }
+            if (event.data.voice) {
+                console.log("voice!")
+                this.getVoiceJoinedPeers()
+            }
         }
 
         this.connection.onstream = (event) => {
@@ -196,6 +208,7 @@ class ScreenShareSession extends React.Component {
             username : this.props.username,
             time: new Date(),
             text: input,
+            message: true,
         }
         this.connection.send(message)
         this.collectMessage(message)
@@ -236,6 +249,37 @@ class ScreenShareSession extends React.Component {
         this.setState({contentDisplay: listItem})
     }
 
+    getVoiceJoinedPeers = () => {
+        let peers = Array.from(this.connection.getAllParticipants())
+        peers = peers.filter(p => this.connection.peers[p].extra.voiceJoined != null)
+        console.log(peers)
+        this.setState({voicePeers: peers})
+    }
+
+    toggleJoinVoice = (bool) => {
+        let data = {
+            id : this.connection.userid,
+            username : this.props.username,
+            voice: bool
+        }
+        this.connection.send(data)
+        this.connection.extra.voiceJoined = bool
+        this.connection.updateExtraData()
+        this.getVoiceJoinedPeers()
+        this.setState({voiceStreaming: bool})
+    }
+
+    toggleMuteVoice = (b) => {
+        this.setState({voiceMuted: b})
+    }
+
+    setVoiceSession = (session) => {
+        this.setState({voiceSession: session})
+        if (!session) {
+            this.setState({voiceMuted: false})
+        }
+    }
+
     componentDidMount() {
         this.setRoomID()
         window.addEventListener("load", () => {
@@ -246,6 +290,7 @@ class ScreenShareSession extends React.Component {
         })
         this.connection.audiosContainer = document.getElementById('audios-container');
         console.log(this.props.username)
+        this.getVoiceJoinedPeers()
     }
 
     render() {
@@ -290,7 +335,13 @@ class ScreenShareSession extends React.Component {
                     }
 
                     {(this.state.contentDisplay === "Voice Call") &&
-                        <VoiceCall connection={this.connection} {...this.state}/>
+                        <VoiceCall {...this.state}
+                                   joinVoice={() => this.toggleJoinVoice(true)}
+                                   endVoice={() => this.toggleJoinVoice(false)}
+                                   toggleMuteVoice={(b) => this.toggleMuteVoice(b)}
+                                   setVoiceSession={(s) => this.setVoiceSession(s)}
+                                   {...this.props}
+                        />
                     }
 
                 </Card>

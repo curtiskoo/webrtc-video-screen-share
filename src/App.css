@@ -35,6 +35,11 @@
   color: #61dafb;
 }
 
+#home {
+  margin: auto;
+  color: floralwhite;
+}
+
 .username-right {
   right: 0;
   position: relative;

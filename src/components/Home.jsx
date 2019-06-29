@@ -25,7 +25,7 @@ class Home extends React.Component {
         console.log("Home")
         console.log(this.props)
         return (
-            <div>
+            <div id="home">
                 Welcome!
                 <form onSubmit={() => {
                     this.setRoomID();
