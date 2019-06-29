@@ -52,16 +52,21 @@ class ScreenShareSession extends React.Component {
 
         this.connection.onmessage = (event) => {
             // console.log(`${event.userid}: ${event.data}`)
-            console.log(event)
+            // console.log(event)
             if (event.data.message) {
                 console.log("message!")
                 this.collectMessage(event.data)
             }
             if (event.data.voice) {
                 console.log("voice!")
+                console.log(event)
                 this.getVoiceJoinedPeers()
             }
         }
+
+        // this.connection.onExtraDataUpdated = (event) => {
+        //     console.log(event)
+        // }
 
         this.connection.onstream = (event) => {
             console.log('onstream')
@@ -78,18 +83,6 @@ class ScreenShareSession extends React.Component {
                 streamtype.muted = false
             } else if (event.mediaElement.nodeName === "AUDIO") {
                 streamtype = document.getElementById('audio-only')
-                // streamtype.srcObject = event.stream
-                // streamtype.play()
-                // if (event.type === 'remote') {
-                //     streamtype.muted = true
-                //     streamtype.volume = 0
-                //     console.log('here')
-                // } else {
-                //     console.log('here too')
-                //     streamtype.volume = 0
-                //     streamtype.muted = true
-                //     console.log(streamtype)
-                // }
             }
             console.log(streamtype)
 
@@ -233,7 +226,7 @@ class ScreenShareSession extends React.Component {
     getExistingMessages = () => {
         let peers = Array.from(this.connection.getAllParticipants())
         peers = peers.filter(p => this.connection.peers[p].extra.messages != null)
-        console.log(peers)
+        // console.log(peers)
         for (let i = 0; i < peers.length; i++) {
             console.log(`Already in channel: ${peers[i]}`)
             if (this.connection.peers[peers[i]].extra.messages) {
@@ -251,9 +244,21 @@ class ScreenShareSession extends React.Component {
 
     getVoiceJoinedPeers = () => {
         let peers = Array.from(this.connection.getAllParticipants())
-        peers = peers.filter(p => this.connection.peers[p].extra.voiceJoined != null)
-        console.log(peers)
-        this.setState({voicePeers: peers})
+        // peers = peers.filter(p => this.connection.peers[p].extra.voiceJoined != null)
+        // console.log(this.connection.peers[peers[0]])
+        // // console.log(this.connection.peers)
+        // for (let i = 0; i < peers.length; i++) {
+        //     console.log(peers[i])
+        //     console.log(this.connection.peers[peers[i]])
+        // }
+        this.connection.getAllParticipants().forEach((id) => {
+            let user = this.connection.peers[id]
+            let extra = user.extra
+            console.log(user, extra)
+        })
+
+        this.setState({voicePeers: peers.filter(p => this.connection.peers[p].extra.voiceJoined)})
+        console.log(this.state.voicePeers)
     }
 
     toggleJoinVoice = (bool) => {
@@ -263,8 +268,10 @@ class ScreenShareSession extends React.Component {
             voice: bool
         }
         this.connection.send(data)
+        console.log(bool)
         this.connection.extra.voiceJoined = bool
         this.connection.updateExtraData()
+        console.log(this.connection.extra)
         this.getVoiceJoinedPeers()
         this.setState({voiceStreaming: bool})
     }
@@ -294,9 +301,8 @@ class ScreenShareSession extends React.Component {
     }
 
     render() {
-        console.log(this.props)
-        console.log(this.connection)
-        console.log(this.state)
+        console.log(this.connection.extra)
+        console.log(this.state.voicePeers)
         return (
             <React.Fragment>
                 <div className="display-stream-container">

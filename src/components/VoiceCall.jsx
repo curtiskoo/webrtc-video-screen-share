@@ -48,8 +48,8 @@ class VoiceCall extends React.Component {
 
         this.connection.onstream = (event) => {
             console.log('onstream')
-            this.setState({streaming: true})
-            this.props.joinVoice()
+            // this.setState({streaming: true})
+            // this.props.joinVoice()
         };
 
         this.connection.onstreamended = (event) => {
@@ -132,6 +132,7 @@ class VoiceCall extends React.Component {
             })
             this.props.setVoiceSession(this.connection)
         }
+        this.props.joinVoice()
     }
 
     handleEndCall = () => {
@@ -173,7 +174,7 @@ class VoiceCall extends React.Component {
     render() {
         console.log(this.props)
         console.log(this.connection)
-        console.log(this.connection.getAllParticipants())
+        // console.log(this.connection.getAllParticipants())
         return (
             <React.Fragment>
                 {!this.props.voiceStreaming
