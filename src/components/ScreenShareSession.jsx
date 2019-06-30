@@ -26,6 +26,7 @@ class ScreenShareSession extends React.Component {
         }
 
         this.connection = new RTCMultiConnection
+        this.connection.extra.username = this.props.username
 
 
         this.connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
@@ -52,21 +53,22 @@ class ScreenShareSession extends React.Component {
 
         this.connection.onmessage = (event) => {
             // console.log(`${event.userid}: ${event.data}`)
-            // console.log(event)
+            console.log(event)
             if (event.data.message) {
                 console.log("message!")
                 this.collectMessage(event.data)
             }
-            if (event.data.voice) {
+            if (event.data.voice != null) {
                 console.log("voice!")
                 console.log(event)
                 this.getVoiceJoinedPeers()
             }
         }
 
-        // this.connection.onExtraDataUpdated = (event) => {
-        //     console.log(event)
-        // }
+        this.connection.onExtraDataUpdated = (event) => {
+            console.log(`updated: ${event}`)
+            this.getVoiceJoinedPeers()
+        }
 
         this.connection.onstream = (event) => {
             console.log('onstream')
@@ -257,23 +259,29 @@ class ScreenShareSession extends React.Component {
             console.log(user, extra)
         })
 
-        this.setState({voicePeers: peers.filter(p => this.connection.peers[p].extra.voiceJoined)})
+        peers = peers.filter(p => this.connection.peers[p].extra.voiceJoined)
+        peers = peers.map((p) => {return {id: p, username: this.connection.peers[p].extra.username}})
+        this.setState({voicePeers: peers})
         console.log(this.state.voicePeers)
     }
 
     toggleJoinVoice = (bool) => {
-        let data = {
-            id : this.connection.userid,
-            username : this.props.username,
-            voice: bool
-        }
-        this.connection.send(data)
-        console.log(bool)
         this.connection.extra.voiceJoined = bool
         this.connection.updateExtraData()
         console.log(this.connection.extra)
-        this.getVoiceJoinedPeers()
-        this.setState({voiceStreaming: bool})
+        // setTimeout(() => {
+          let data = {
+            id : this.connection.userid,
+            username : this.props.username,
+            voice: bool,
+          }
+          this.connection.send(data)
+
+          console.log(this.connection.extra)
+          // this.getVoiceJoinedPeers()
+          this.setState({voiceStreaming: bool})
+        // },
+        //   100)
     }
 
     toggleMuteVoice = (b) => {
@@ -342,8 +350,14 @@ class ScreenShareSession extends React.Component {
 
                     {(this.state.contentDisplay === "Voice Call") &&
                         <VoiceCall {...this.state}
-                                   joinVoice={() => this.toggleJoinVoice(true)}
-                                   endVoice={() => this.toggleJoinVoice(false)}
+                                   joinVoice={() => {
+                                     this.toggleJoinVoice(true)
+                                     console.log("voice joining")
+                                   }}
+                                   endVoice={() => {
+                                     this.toggleJoinVoice(false)
+                                     console.log("voice ending")
+                                   }}
                                    toggleMuteVoice={(b) => this.toggleMuteVoice(b)}
                                    setVoiceSession={(s) => this.setVoiceSession(s)}
                                    {...this.props}

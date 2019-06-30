@@ -6,6 +6,11 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import MicIcon from '@material-ui/icons/Mic';
 import {makeOrJoinRoom} from "../methods";
 import RTCMultiConnection from "rtcmulticonnection";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 
 class VoiceCall extends React.Component {
     constructor(props) {
@@ -177,6 +182,29 @@ class VoiceCall extends React.Component {
         // console.log(this.connection.getAllParticipants())
         return (
             <React.Fragment>
+              <List>
+                {this.props.voicePeers.map((peer, index) => (
+                    <React.Fragment>
+                      <ListItem key={index} alignItems='flex-start'>
+                        <ListItemText
+                          secondary={
+                            <React.Fragment>
+                              <Typography
+                                component="span"
+                                variant="body2"
+                                color="textPrimary"
+                              >
+                                {`${peer.username}:\t`}
+                              </Typography>
+                              {/*{message.text}*/}
+                            </React.Fragment>
+                          }
+                        />
+                      </ListItem>
+                    </React.Fragment>
+                  )
+                )}
+              </List>
                 {!this.props.voiceStreaming
                     ?
                     <Fab variant="extended"
