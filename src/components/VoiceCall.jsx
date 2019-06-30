@@ -11,6 +11,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
 
 class VoiceCall extends React.Component {
     constructor(props) {
@@ -20,8 +21,8 @@ class VoiceCall extends React.Component {
 
         this.connection =
             this.props.voiceSession
-            ? this.props.voiceSession
-            : new RTCMultiConnection
+                ? this.props.voiceSession
+                : new RTCMultiConnection
 
 
 
@@ -182,29 +183,33 @@ class VoiceCall extends React.Component {
         // console.log(this.connection.getAllParticipants())
         return (
             <React.Fragment>
-              <List>
-                {this.props.voicePeers.map((peer, index) => (
-                    <React.Fragment>
-                      <ListItem key={index} alignItems='flex-start'>
-                        <ListItemText
-                          secondary={
+                <List>
+                    {this.props.voicePeers.map((peer, index) => (
                             <React.Fragment>
-                              <Typography
-                                component="span"
-                                variant="body2"
-                                color="textPrimary"
-                              >
-                                {`${peer.username}:\t`}
-                              </Typography>
-                              {/*{message.text}*/}
+                                <ListItem key={index} alignItems='flex-start'>
+                                    <Avatar src={require("../resources/shiba.jpg")} className="avatar-icon">
+                                        {/*<img src="../resources/shiba.jpg"/>*/}
+                                    </Avatar>
+                                    <ListItemText
+                                        secondary={
+                                            <React.Fragment>
+                                                <Typography
+                                                    component="span"
+                                                    variant="body1"
+                                                    color="textPrimary"
+                                                >
+                                                    {`${peer.username}\t`}
+                                                </Typography>
+                                                {/*{message.text}*/}
+                                            </React.Fragment>
+                                        }
+                                        className="voice-peer"
+                                    />
+                                </ListItem>
                             </React.Fragment>
-                          }
-                        />
-                      </ListItem>
-                    </React.Fragment>
-                  )
-                )}
-              </List>
+                        )
+                    )}
+                </List>
                 {!this.props.voiceStreaming
                     ?
                     <Fab variant="extended"

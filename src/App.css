@@ -24,10 +24,11 @@
 }
 
 .App-body {
-  display: table;
+  display: flex;
+  flex-direction: column;
   min-height: 90vh;
   width: 100%;
-  position: absolute;
+  position: relative;
   bottom: 0;
 }
 
@@ -38,6 +39,14 @@
 #home {
   margin: auto;
   color: floralwhite;
+}
+
+.avatar-icon {
+  margin-right: 10px;
+}
+
+.voice-peer {
+  margin: auto !important;
 }
 
 .username-right {
@@ -136,7 +145,7 @@ video {
   max-height: 80vh;
 }
 
-@media (orientation:portrait) {
+@media (orientation:portrait), (max-width: 480px){
 
   #videos-container {
     font-size: xx-small;

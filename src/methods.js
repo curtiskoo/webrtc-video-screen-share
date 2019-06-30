@@ -9,6 +9,15 @@ export function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+export function waitForElement(id, callback){
+    var poops = setInterval(function(){
+        if(document.getElementById(id)){
+            clearInterval(poops);
+            callback();
+        }
+    }, 100);
+}
+
 // RTC related functions
 
 export function makeOrJoinRoom(roomid, connection, sessionParams) {

@@ -3,7 +3,7 @@ import RTCMultiConnection from "rtcmulticonnection"
 import io from "socket.io-client"
 import MessageList from "./MessageList";
 import Card from '@material-ui/core/Card';
-import {makeOrJoinRoom, scrollToBottom} from "../methods";
+import {makeOrJoinRoom, scrollToBottom, waitForElement} from "../methods";
 import SessionAppBar from "./SessionAppBar";
 import VoiceCall from "./VoiceCall";
 
@@ -52,8 +52,6 @@ class ScreenShareSession extends React.Component {
         };
 
         this.connection.onmessage = (event) => {
-            // console.log(`${event.userid}: ${event.data}`)
-            console.log(event)
             if (event.data.message) {
                 console.log("message!")
                 this.collectMessage(event.data)
@@ -66,7 +64,6 @@ class ScreenShareSession extends React.Component {
         }
 
         this.connection.onExtraDataUpdated = (event) => {
-            console.log(`updated: ${event}`)
             this.getVoiceJoinedPeers()
         }
 
@@ -219,7 +216,9 @@ class ScreenShareSession extends React.Component {
 
     setExtraMessages = (messages) => {
         this.setState({messages: messages}, () => {
-            scrollToBottom("message-inner-list")
+            if (this.state.contentDisplay === "Stream Chat") {
+                scrollToBottom("message-inner-list")
+            }
             this.connection.extra.messages = this.state.messages
             this.connection.updateExtraData()
         })
@@ -242,6 +241,12 @@ class ScreenShareSession extends React.Component {
 
     changeContent = (listItem) => {
         this.setState({contentDisplay: listItem})
+        if (listItem === "Stream Chat") {
+            let id = "message-inner-list"
+            waitForElement(id, () => {
+                scrollToBottom(id)
+            })
+        }
     }
 
     getVoiceJoinedPeers = () => {
@@ -262,13 +267,11 @@ class ScreenShareSession extends React.Component {
         peers = peers.filter(p => this.connection.peers[p].extra.voiceJoined)
         peers = peers.map((p) => {return {id: p, username: this.connection.peers[p].extra.username}})
         this.setState({voicePeers: peers})
-        console.log(this.state.voicePeers)
     }
 
     toggleJoinVoice = (bool) => {
         this.connection.extra.voiceJoined = bool
         this.connection.updateExtraData()
-        console.log(this.connection.extra)
         // setTimeout(() => {
           let data = {
             id : this.connection.userid,
@@ -276,9 +279,6 @@ class ScreenShareSession extends React.Component {
             voice: bool,
           }
           this.connection.send(data)
-
-          console.log(this.connection.extra)
-          // this.getVoiceJoinedPeers()
           this.setState({voiceStreaming: bool})
         // },
         //   100)
@@ -309,8 +309,6 @@ class ScreenShareSession extends React.Component {
     }
 
     render() {
-        console.log(this.connection.extra)
-        console.log(this.state.voicePeers)
         return (
             <React.Fragment>
                 <div className="display-stream-container">
